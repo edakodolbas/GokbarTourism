@@ -1,0 +1,304 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ulaşım Hizmetleri</title>
+  <script>
+    // Sayfanın yüklenmesi tamamlandığında veya dil değiştirme işlemi yapıldığında çalışacak olan fonksiyon
+    window.onload = function() {
+      // Tarayıcıda kaydedilmiş dil ayarlarını kontrol et
+      var userLang = navigator.language || navigator.userLanguage;
+  
+      // Eğer kullanıcı Türkçe dilini tercih etmişse veya tarayıcı dil ayarları Türkçe ise
+      if (userLang === "tr") {
+        // Kullanıcıyı Türkçe versiyon sayfasına yönlendir
+        window.location.href = "index_tr.html";
+      }
+    };
+  </script>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #343a40;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    #logo {
+      width: 200px;
+      height: auto;
+    }
+
+    nav {
+      background-color: #343a40;
+      padding: 1rem 0;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #2e2f30;
+    }
+
+    .language-selector {
+      position: relative;
+      display: inline-block;
+      height: 100%;
+    }
+
+    .language-selector {
+      position: relative;
+      display: inline-block;
+      height: 100%;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #2e2f30;
+      min-width: 120px;
+      box-shadow: white;
+      z-index: 1;
+      left: 0;
+      top: calc(100% + 5px);
+      border-radius: 5px;
+    }
+    
+    .dropdown-content a {
+      padding: 10px;
+    }
+
+    .language-selector:hover .dropdown-content {
+      display: block;
+    }
+
+    .triangle-icon {
+      position: absolute;
+      top: 60%;
+      right: -15px;
+      transform: translateY(-50%) rotate(360deg);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 8px solid black;
+      cursor: pointer;
+    }
+
+    .language-icon {
+      width: 20px;
+      height: auto;
+      float: right;
+    }
+
+    main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .text-content {
+      flex: 1;
+      padding-right: 20px;
+      padding-left: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+      text-align: justify;
+    }
+
+    .image-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 80px;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
+
+    #certificateIcon {
+      width: 30px;
+      cursor: pointer;
+      margin-left: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 1231px;
+      max-height: 889px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    h2 {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- JavaScript -->
+<script src="language.js"></script>
+
+    <img id="logo" src="{% static 'medicine/Images/logo_new.jpg' %}" alt="Logo">
+    <nav>
+      <a href="#about-us-section">Hakkımızda</a>
+      <a href="#services-section">Hizmetler</a>
+      <a href="login_tr.html" class="login-button">Giriş</a>
+      <a href="contact_tr.html" class="contact-button">İletişim</a>
+      <div class="language-selector">
+        <img src="https://www.mercurylanguage.co.uk/wp-content/uploads/2014/12/icon-welcome-200x200.png" alt="Dil" class="language-icon">
+        <span class="triangle-icon" onclick="toggleDropdown()"></span>
+        <div class="dropdown-content" id="dropdownContent">
+          <a href="#" onclick="changeLanguage('tr')">TR</a>
+          <a href="#" onclick="changeLanguage('en')">EN</a>
+        </div>
+      </div>
+      
+    </nav>
+  </header>
+
+  <main>
+    <div class="text-content">
+      <div id="about-us-section" class="card">
+        <h2>Hakkımızda</h2>
+        <p>Gokbar Turizm LLC olarak, ihtiyaçlarınıza hitap etmek için geniş bir hizmet yelpazesi sunmaktan gurur duyuyoruz. Hizmetlerimiz şunları içerir:</p>
+        <ul>
+          <li>Süper Şoförlü Araç Kiralama: En son Mercedes Maybach modellerimizde olağanüstü hizmet ve en üstün teknolojik özellikler sunarak, şoförlü taşımacılıkta iş sınıfı bir deneyim sunuyoruz.</li>
+          <li>Kaliteli ve Güvenli Hizmet: Son teknoloji ve güvenlik özellikleri ile donatılmış filomuz, değerli konuklarımız için konforlu ve güvenli bir yolculuk sağlar.</li>
+          <li>Profesyonel Sürücüler: Sürücülerimiz, yılların tecrübesine sahip deneyimli profesyonellerdir ve yolculuğunuz boyunca dostça ve uzman bir hizmet sunarlar.</li>
+          <li>Müşteri Odaklı Yaklaşım: Müşteri beklentilerini aşmayı taahhüt ederek, müşterilerimizin güvenini sürekli olarak yüksek kaliteli hizmet sunarak kazanmaya çalışıyoruz.</li>
+        </ul>
+        <p>Gokbar Turizm Ticaret Limited Şirketi'nde müşteri memnuniyeti ve güvenliği en üst önceliğimizdir ve size en iyi deneyimi sunmaya adanmışızdır.</p>
+      </div>
+
+      <div id="services-section" class="card">
+        <h2>Hizmetler</h2>
+        <p>Gokbar Turizm Ticaret Limited Şirketi olarak, ihtiyaçlarınıza hitap etmek için geniş bir hizmet yelpazesi sunmaktan gurur duyuyoruz. Hizmetlerimiz şunları içerir:</p>
+        <ul>
+          <li>Şoförlü Araç Kiralama: En son Mercedes Maybach VIP araçlarımızla konforlu ve güvenli bir yolculuk deneyimi yaşayın.</li>
+          <li>Havalimanı Transferleri: Havalimanından otelinize veya istediğiniz herhangi bir yere zamanında ve uygun bir şekilde transfer hizmeti sunuyoruz.</li>
+          <li>Özel Sürücü Hizmeti: Profesyonel sürücülerimiz sizi özel etkinliklerinize veya iş seyahatlerinize kadar ihtiyacınıza göre uyarlar.</li>
+          <li>Günlük Kiralama: Gün boyunca ihtiyacınız olan saatler için bir araç kiralamanın esnekliğinin tadını çıkarın.</li>
+        </ul>
+        <p>Gokbar Turizm olarak, tüm seyahat ihtiyaçlarınız için çözümler sunmak için buradayız. Müşteri memnuniyetine odaklanarak, her zaman en yüksek kalitede hizmeti sunmayı hedefliyoruz.</p>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <img src="https://ultravip.com.tr/wp-content/uploads/2024/01/Vito-Vip-Dizayn-Modelleri-Beyaz.webp" alt="Mercedes Maybach">
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2024 Ulaşım Hizmetleri
+    <img id="certificateIcon" src="https://i.pngimg.me/thumb/f/720/m2H7N4N4b1H7m2b1.jpg" alt="Belge İkonu" onclick="openCertificateModal()">
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleDropdown() {
+      var dropdownContent = document.getElementById('dropdownContent');
+      dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function openCertificateModal() {
+    // Yerel dosya yolunu belirtin
+    var localFilePath = 'file:///C:/Users/Edos/Desktop/YAYINDAKİ/medicine/static/medicine/Images/certificate.jpg';
+    // Yerel dosya yolunu açacak bir link oluşturun
+    var link = document.createElement('a');
+    link.href = localFilePath;
+    link.target = '_blank'; // Yeni bir sekmede açılmasını sağlayın
+    document.body.appendChild(link);
+    link.click(); // Linki tıklayın
+    document.body.removeChild(link); // Linki kaldırın
+}
+
+  function closeCertificateModal() {
+      var modal = document.getElementById('certificateModal');
+      modal.style.display = "none";
+  }
+  
+
+
+
+
+    
+      
+
+  </script>
+
+</body>
+
+</html>

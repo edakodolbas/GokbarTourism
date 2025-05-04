@@ -1,0 +1,30 @@
+<!-- reservation_form.html -->
+
+ <!-- If you have a base template, extend it -->
+
+{% block content %}
+<div class="book-ride-container">
+  <div class="card">
+    <h2>Book Your Ride</h2>
+    <form class="booking-card" method="post"> <!-- Add method="post" to submit the form -->
+      {% csrf_token %} <!-- Add CSRF token for security -->
+      <div class="input-group">
+        <label for="pickup">Pickup Location:</label>
+        <input type="text" id="pickup" name="from_location" placeholder="Enter pickup location">
+        <!-- Use 'from_location' as the name attribute for pickup location -->
+      </div>
+      <div class="input-group">
+        <label for="dropoff">Drop-off Location:</label>
+        <input type="text" id="dropoff" name="to_location" placeholder="Enter drop-off location">
+        <!-- Use 'to_location' as the name attribute for drop-off location -->
+      </div>
+      <div class="input-group">
+        <label for="datetime">Date and Time:</label>
+        <input type="datetime-local" id="datetime" name="datetime">
+        <!-- Use 'datetime' as the name attribute for date and time -->
+      </div>
+      <button type="submit">Book Now</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

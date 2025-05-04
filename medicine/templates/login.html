@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script>
+        function changeLanguage(selectedLanguage) {
+            // Dil değişikliği işlemleri...
+
+            // "Contact" sayfasına yönlendirme
+            var loginPage = selectedLanguage === 'en' ? 'login.html' : 'login_tr.html';
+            window.location.href = loginPage;
+        }
+    </script>
+    <style>
+        body {
+            background-color: #343a40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            align-items: center;
+            background-color: #f8f9fa; /* Kart arka plan rengi */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            padding: 20px;
+            color: #343a40;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #343a40;
+            font-size: 20px; /* Yazı boyutunu biraz küçülttük */
+            font-weight: normal; /* Kalınlığı normal yapıyoruz */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            font-size: 16px; /* Giriş alanlarının yazı boyutunu ayarladık */
+        }
+
+        button {
+            background-color: #007bff; /* Buton rengini mavi olarak değiştirdik */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px; /* Buton yazı boyutunu biraz küçülttük */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            color: #343a40;
+            text-decoration: none;
+            font-size: 14px; /* Bağlantıların yazı boyutunu ayarladık */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+
+    <div class="card">
+
+        <div class="login-info">
+            <h2>Login Information</h2>
+            <form>
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username" required><br><br>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" required><br><br>
+                <button type="button" onclick="location.href='/vehicles.html'">Login and Start</button><br>
+                <a href="/signup.html">Sign Up</a>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

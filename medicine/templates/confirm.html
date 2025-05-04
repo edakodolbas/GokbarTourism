@@ -1,0 +1,23 @@
+<!-- confirm.html -->
+
+
+{% block content %}
+<h2>Confirmation Page</h2>
+
+<h3>User Information:</h3>
+<p>Email: {{ signup_info.email }}</p>
+<p>Phone Number: {{ signup_info.phone_number }}</p>
+
+<h3>Reservations:</h3>
+<ul>
+  {% for reservation in reservations %}
+    <li>
+      Pickup Location: {{ reservation.from_location }} <br>
+      Drop-off Location: {{ reservation.to_location }} <br>
+      Date and Time: {{ reservation.datetime }} <br>
+    </li>
+  {% empty %}
+    <li>No reservations</li>
+  {% endfor %}
+</ul>
+{% endblock %}

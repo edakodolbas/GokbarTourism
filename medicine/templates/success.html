@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Submitted Successfully</title>
+</head>
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>Form Submitted Successfully.<br>
+         Please Go To Payment Page To Continue!</h1>
+    <!-- Success message or redirection links -->
+    <button type="button" id="payment-button">Go To Payment</button>
+
+    <script>
+    document.getElementById("payment-button").addEventListener("click", function() {
+      window.location.href = "payment.html";
+    });
+    </script>
+
+</body>
+</html>

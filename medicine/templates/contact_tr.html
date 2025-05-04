@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim Formu</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            font-size: 16px; /* Genel font büyüklüğü */
+        }
+    
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+    
+        nav {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+    
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    
+        #map {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+    
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #000000;
+            margin-bottom: 100px; /* Footer ile çakışmayı önlemek için */
+            position: relative; /* WhatsApp sohbeti div'iyle konumlandırma için gerekli */
+        }
+    
+        .container h1 {
+            text-align: center;
+            padding: 20px;
+            background: black;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 28px;
+            color: #000;
+        }
+    
+        form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    
+        form label {
+            display: block;
+            font-size: 14px; /* Form etiketlerinin font büyüklüğü */
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="tel"],
+        form textarea {
+            width: calc(100% - 22px);
+            padding: 8px; /* Input alanlarının iç boşlukları */
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px; /* Input alanlarının font büyüklüğü */
+            background-color: #fff;
+        }
+    
+        form textarea {
+            height: 100px;
+        }
+    
+        form button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px; /* Gönder butonunun font büyüklüğü */
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+    
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 0.5rem; /* Footer'ın padding değerini küçülttüm */
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            max-width: 100%; /* Footer'ın genişliğini küçülttüm */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px; /* Footer metinlerinin font büyüklüğü */
+        }
+        
+        
+        .contact-info {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            display: flex;
+            justify-content: center; /* İçerikleri yatay olarak ortalamak için */
+            align-items: center;
+            margin-left: 400px;
+        }
+        
+        .info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            justify-content: center; /* İçerikleri yatay olarak ortalamak için */
+        }
+        
+        .info img {
+            width: 20px;
+            height: auto;
+            margin-right: 5px;
+        }
+        
+        .info .address,
+        .info .phone {
+            font-size: 12px;
+            color: white;
+            margin-left: 5px;
+            margin-right: 10px;
+        }
+        
+        .whatsapp-chat {
+            position: fixed;
+            bottom: 20px; 
+            right: 250px; /* WhatsApp sohbet linkini sola çekmek için pozitif bir değer kullanıyoruz */
+            background-color: #25d366;
+            padding: 8px 16px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px; /* WhatsApp sohbet linkinin font büyüklüğü */
+            margin-right: 10px; /* Telefon bilgisinden biraz uzaklaştırmak için */
+        }
+        
+        
+        
+        
+        
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
+        
+        .whatsapp-chat a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Mobil cihazlar için ayarlar */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            form label,
+            form input[type="text"],
+            form input[type="email"],
+            form input[type="tel"],
+            form textarea {
+                width: 100%;
+            }
+            form button[type="submit"] {
+                width: 100%;
+            }
+            .info {
+                margin-left: 0;
+            }
+            .whatsapp-chat {
+                right: 10px;
+            }
+        }
+    
+    </style>
+    
+</head>
+
+<body>
+    <script src="language.js"></script>
+
+    <nav>
+
+        <header>
+            <h1>İletişim</h1>
+        </header>
+    </nav>
+
+    <div class="container">
+        <div id="map"></div>
+        
+
+        <form id="contactForm">
+            <label for="name">Ad & Soyad:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="email">E-posta Adresi:</label>
+            <input type="email" id="email" name="email" required><br>
+            <label for="phone">Telefon Numarası:</label>
+            <input type="tel" id="phone" name="phone" required><br>
+            <label for="message">Mesajınız:</label><br>
+            <textarea id="message" name="message" required></textarea><br>
+            <button type="button" id="submitButton">Gönder</button>
+        </form>
+
+    <footer>
+        <div class="contact-info">
+            <div class="info">
+                <img src="https://e7.pngegg.com/pngimages/179/773/png-clipart-black-gps-illustration-address-symbol-symbol-miscellaneous-angle-thumbnail.png" alt="Adres Sembolü">
+                <span class="address">BAHÇEŞEHİR 1. BÖLGE, KEMAL SUNAL CADDESİ, BAHÇEŞEHİR ATRİUM PAZARI BLOK NO: 19 DÜKKAN NO: 410 BAHÇEŞEHİR / İSTANBUL</span>
+            
+                <img src="https://e7.pngegg.com/pngimages/160/27/png-clipart-gray-telephone-logo-computer-icons-logo-telephone-miscellaneous-text.png" alt="Telefon Sembolü">
+                <span class="phone">+90 (212) 608 1304 </span>
+                <div class="whatsapp-chat">
+                    <a href="https://wa.me/905370358411" target="_blank">WhatsApp </a>
+                </div>
+            </div>
+            </div>
+         </div>
+           </div>
+    </footer>
+    
+    
+    
+    <script>
+        // Leaflet Harita
+        var map = L.map('map').setView([41.2756, 28.7519], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> katkıları'
+        }).addTo(map);
+        L.marker([41.2756, 28.7519]).addTo(map)
+            .bindPopup('İstanbul Havalimanı')
+            .openPopup();
+
+        // İletişim Formu Gönderimi
+        document.getElementById("submitButton").addEventListener("click", function() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var message = document.getElementById("message").value;
+
+            var mailtoLink = "mailto:info@gokbartourism.com" +
+                "?subject=İletişim Formundan Yeni Mesaj" +
+                "&body=Ad: " + name +
+                "%0AE-posta: " + email +
+                "%0ATelefon: " + phone +
+                "%0AMesaj: " + message;
+
+            window.location.href = mailtoLink;
+        });
+
+        // Dil Değiştirme Fonksiyonu
+        function changeLanguage(lang) {
+            setLanguage(lang);
+            translatePage();
+        }
+
+        // Sayfadaki Tüm Metinleri Çevirme Fonksiyonu
+        function translatePage() {
+            document.getElementById('contactForm').innerHTML = `
+                <label for="name">${translate('nameLabel')}:</label>
+                <input type="text" id="name" name="name" required><br>
+                <label for="email">${translate('emailLabel')}:</label>
+                <input type="email" id="email" name="email" required><br>
+                <label for="phone">${translate('phoneLabel')}:</label>
+                <input type="tel" id="phone" name="phone" required><br>
+                <label for="message">${translate('messageLabel')}:</label><br>
+                <textarea id="message" name="message" required></textarea><br>
+                <button type="button" id="submitButton">${translate('submitButton')}</button>
+            `;
+
+            document.querySelector('.address').textContent = translate('address');
+            document.querySelector('.phone').textContent = translate('phoneNumber');
+            document.querySelector('.whatsapp-chat a').textContent = translate('whatsappChatLink');
+        }
+
+        // Sayfa Yüklendiğinde Dil Çevirisini Yap
+        window.onload = function() {
+            translatePage();
+        };
+        
+            function changeLanguage(selectedLanguage) {
+              // Dil değişikliği işlemleri...
+          
+              // "Contact" sayfasına yönlendirme
+              var contactPage = selectedLanguage === 'en' ? 'contact.html' : 'contact_tr.html';
+              window.location.href = contactPage;
+            }
+         
+          
+    </script>
+    
+   
+  
+</body>
+
+</html>

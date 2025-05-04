@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #c7c4ff, #aad4ff); 
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); 
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+        }
+
+        h1 {
+            color: #6a5acd; 
+            margin-bottom: 20px;
+            font-weight: bold; 
+        }
+
+        p {
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold; 
+        }
+
+        p.split-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 10px;
+            margin: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #6a5acd; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold; 
+            margin-bottom: 20px; 
+        
+        }
+
+        button:hover {
+            background-color: #836fff; 
+        }
+
+        .back-to-sign-in {
+            margin-top: 20px;
+            font-size: 16px; 
+            color: #4169e1; 
+            font-weight: bold; 
+            text-decoration:underline;
+            
+        }
+
+        .back-to-sign-in:hover {
+            color: #1e90ff; 
+        }
+           
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verify Your Email</h1>
+        <p>PLEASE ENTER YOUR VERIFICATION CODE</p>
+        <p class="split-text">Enter the verification code sent to the email address<br> you use in your account in the field below.</p>
+        <form action="submit_verification.php" method="POST">
+            <input type="text" name="verification_code" placeholder="Enter your verification code" required><br>
+            <button type="submit" name="send">Send</button>
+        </form>
+        <a href="signup.html" class="back-to-sign-in">Back to Sign Up</a>
+    </div>
+</body>
+</html>

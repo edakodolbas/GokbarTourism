@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background:white;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px; 
+            margin: 50px auto 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1); 
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"],
+        select {
+            width: 100%;
+            padding: 12px; 
+            margin-bottom: 20px; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px; 
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px; 
+            font-size: 15px; 
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .card-logos {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .card-logos img {
+            max-width: 70%; 
+            height: auto; 
+            display: block; 
+            margin: 0 auto; 
+        }
+        .payment-method-info {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .payment-method-info img {
+            width: 30px;
+            margin-right: 5px;
+        }
+        .payment-method-info div {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        #expiration-date-month,
+        #expiration-date-year {
+            width: calc(50% - 5px);
+            padding: 12px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            overflow-y: auto; 
+            max-height: 150px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ödeme</h1>
+    <div class="payment-method-info">
+        <p>Lütfen ödeme yönteminizi seçin ve gerekli bilgileri doldurun.</p>
+        <p>Ödeme yöntemleri:</p>
+        <div>
+            <input type="radio" id="visa" name="payment-method" value="Visa">
+            <label for="visa"><img src="https://i.pinimg.com/originals/0b/08/7c/0b087c9ad51a5c0a3afd57a05ebe4bee.png" alt="Visa Logosu"> Visa</label>
+        </div>
+        <div>
+            <input type="radio" id="mastercard" name="payment-method" value="MasterCard">
+            <label for="mastercard"><img src="https://w7.pngwing.com/pngs/305/373/png-transparent-logo-mastercard-font-solar-home-text-orange-logo.png" alt="MasterCard Logosu"> MasterCard</label>
+        </div>
+        <div>
+            <input type="radio" id="amex" name="payment-method" value="AmericanExpress">
+            <label for="amex"><img src="https://banner2.cleanpng.com/20180627/aky/kisspng-centurion-card-american-express-credit-card-discov-amex-5b34540b379cc6.7043903915301560432278.jpg" alt="American Express Logosu"> American Express</label>
+        </div>
+    </div>
+    
+    <form id="payment-form">
+        <input type="text" id="card-number" name="card-number" placeholder="Kredi Kartı Numarası" required>
+        <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
+        <label for="expiration-date">Son Kullanma Tarihi:</label>
+        
+        <div style="display: flex;">
+            <select id="expiration-date-month" name="expiration-date-month" required>
+                <option value="" disabled selected>Ay</option>
+                <option value="01">Ocak</option>
+                <option value="02">Şubat</option>
+                <option value="03">Mart</option>
+                <option value="04">Nisan</option>
+                <option value="05">Mayıs</option>
+                <option value="06">Haziran</option>
+                <option value="07">Temmuz</option>
+                <option value="08">Ağustos</option>
+                <option value="09">Eylül</option>
+                <option value="10">Ekim</option>
+                <option value="11">Kasım</option>
+                <option value="12">Aralık</option>
+            </select>
+            <select id="expiration-date-year" name="expiration-date-year" required>
+                <option value="" disabled selected>Yıl</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2033">2033</option>
+                <option value="2034">2034</option>
+                <option value="2035">2035</option>
+                <option value="2036">2036</option>
+                <option value="2037">2037</option>
+                <option value="2038">2038</option>
+                <option value="2039">2039</option>
+                <option value="2040">2040</option>
+                <!-- Gerekirse daha fazla yıl ekleyin -->
+            </select>
+        </div>
+        <button type="submit">ÖDEMENİZİ TAMAMLAYIN</button>
+    </form>
+    <div id="payment-result"></div>
+    <div class="card-logos">
+        <img src="https://americancarpetandfloorcare.com/wp-content/uploads/2019/05/visa-mastercard-amex.png" alt="Kart Logoları">
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#payment-form').submit(function(event) {
+            event.preventDefault(); 
+
+            // Form verilerini topla
+            var paymentMethod = $('input[name="payment-method"]:checked').val();
+            var cardNumber = $('#card-number').val();
+            var expirationMonth = $('#expiration-date-month').val();
+            var expirationYear = $('#expiration-date-year').val();
+            var cvv = $('#cvv').val();
+
+            // İş Bankası entegrasyonu ile ödeme yap
+            // İş Bankası ödeme entegrasyon kodunuzu buraya ekleyin
+
+            // Örnek olarak:
+            // $.post('İŞ_BANKASI_ÖDEME_ENDPOINTINIZ', { paymentMethod: paymentMethod, cardNumber: cardNumber, expirationDate: expirationDate, cvc: cvc })
+            //     .done(function(data) {
+            //         $('#payment-result').html('<div class="success">Ödeme başarılı!</div>');
+            //     })
+            //     .fail(function(error) {
+            //         $('#payment-result').html('<div class="error">Ödeme başarısız: ' + error + '</div>');
+            //     });
+
+            // Gerçek İş Bankası ödeme entegrasyon kodunuz ile bu örnek kodu değiştirin
+        });
+    });
+</script>
+
+<script>
+    // Eğer dil Türkçe ise Türkçe versiyonuna yönlendir
+    var language = navigator.language || navigator.userLanguage;
+    if (language === 'tr') {
+        window.location.href = 'payment_tr.html';
+    }
+</script>
+
+</body>
+</html>

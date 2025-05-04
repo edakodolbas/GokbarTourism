@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstanbul Haritası ve İki Nokta Seçimi</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JavaScript -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <!-- Esri Geocoding Plugin JavaScript -->
+    <script src="https://unpkg.com/esri-leaflet"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f9f9f9, #e9f2f9); /* Canlı arka plan */
+        }
+
+        #map {
+            height: 450px;
+        }
+
+        #form-container {
+            text-align: right;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            float: right; /* Sağa kaydırma */
+            width: calc(60% - 40px); /* Sayfa genişliğinin tamamı - padding */
+            margin-left: 20px; /* Sol boşluk */
+            margin-right: 20px; /* Sağ boşluk */
+        }
+        
+        
+        #form-container h2 {
+            margin: 5px 0;
+        }
+
+        #form-container input[type="text"],
+        #form-container select {
+            padding: 10px;
+            margin: 5px;
+            width: 100px;
+            
+        }
+
+        #form-container button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+
+        #form-container button:hover {
+            background-color: #45a049;
+        }
+
+        #result-container {
+            margin-top: 10px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Yarı saydamlık */
+            padding: 300px;
+            border-radius: 16px;
+        }
+
+        #result-container p {
+            margin: 5px 0;
+        }
+
+        #result-container .label {
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* New Styles */
+        #form-container select {
+            width: 220px;
+        }
+
+        #form-container input[type="text"] {
+            width: 200px;
+        }
+
+        #form-container .option-group {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        #form-container .option-group label {
+            font-size: 14px;
+            display: block;
+        }
+
+        #form-container img {
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .round-trip-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .round-trip-option label {
+            margin-right: 5px;
+        }
+
+        .round-trip-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .number-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .number-input button {
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+
+        .number-input input {
+            text-align: center;
+            width: 50px;
+            font-size: 14px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <form id="tripForm">
+    <div id="form-container">
+        <div class="option-group">
+            <label for="tripType">Trip Type:</label>
+            <select id="tripType" onchange="toggleTripOptions()">
+                <option value="oneWay">One Way</option>
+                <option value="roundTrip">Round Trip</option>
+            </select>
+        </div>
+        <div id="oneWayOptions" class="option-group">
+            <label for="dateInput"><img src="https://cdn-icons-png.flaticon.com/512/5246/5246290.png" alt="Date"> Date:</label>
+            <input type="text" id="dateInput" placeholder="Select a date and time">
+        </div>
+        <div id="roundTripOptions" class="hidden">
+            <div class="option-group">
+                <label for="fromDateInput"><img src="https://cdn-icons-png.flaticon.com/512/5246/5246290.png" alt="From Date"> From Date:</label>
+                <input type="text" id="fromDateInput" placeholder="Select a date and time">
+            </div>
+            <div class="option-group">
+                <label for="returnDateInput"><img src="https://cdn-icons-png.flaticon.com/512/5246/5246290.png" alt="Return Date"> Return Date:</label>
+                <input type="text" id="returnDateInput" placeholder="Select a date and time" disabled>
+                <span style="color: red; font-size: 12px; display: none;" id="returnDateNote">Return date selection is disabled for One Way trips.</span>
+            </div>
+        </div>
+        <div class="option-group">
+            <label for="fromInput"><img src="https://cdn-icons-png.flaticon.com/512/3683/3683807.png" alt="From Where"> From where:</label>
+            <input type="text" id="fromInput" placeholder="From where">
+            <br>
+            <span id="fromCoords"></span>
+        </div>
+        <div class="option-group">
+            <label for="toInput"><img src="https://cdn-icons-png.flaticon.com/512/1257/1257396.png" alt="To Where"> To where:</label>
+            <input type="text" id="toInput" placeholder="To where">
+            <br>
+            <span id="toCoords"></span>
+        </div>
+        <div class="option-group">
+            <label for="numberOfPeople"><img src="https://w7.pngwing.com/pngs/144/173/png-transparent-person-icon-illustration-computer-icons-icon-design-symbol-person-symbol-miscellaneous-monochrome-sticker.png" alt="Number of People"> Number of People:</label>
+            <div class="number-input">
+                <button onclick="decrementNumberOfPeople()">-</button>
+                <input type="number" id="numberOfPeople" value="1" min="1" max="15">
+                <button onclick="incrementNumberOfPeople()">+</button>
+            </div>
+        </div>
+        <div class="option-group">
+            <label for="numberOfCars"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWz7Gr1ltc8QmfGcmoRDssR0NU36uDFtL500LGdawLdQ&s" alt="Number of Cars"> Number of Cars:</label>
+            <div class="number-input">
+                <button onclick="decrementNumberOfCars()">-</button>
+                <input type="number" id="numberOfCars" value="1" min="1" max="5">
+                <button onclick="incrementNumberOfCars()">+</button>
+            </div>
+        </div>
+        <div class="button-container">
+            <button onclick="resetSelection()">Reset Selection</button>
+            <button onclick="calculateDistanceAndPrice()">Book Now</button>
+            
+        </div>
+    </div>
+    
+    <div id="result-container">
+        <div style="display: inline-block; margin-right: 20px;">
+            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                <p><span class="label" style="font-weight: bold;">Distance</span></p>
+                <p><span id="distance"></span></p>
+            </div>
+        </div>
+        <div style="display: inline-block;">
+            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                <p><span class="label" style="font-weight: bold;">Price</span></p>
+                <p><span id="price"></span></p>
+            </div>
+        </div>
+    </div>
+</form>
+
+    
+
+    <script>
+        var istanbulHavalimani = [41.2756, 28.7519];
+        var map = L.map('map').setView(istanbulHavalimani, 10);
+        var marker1, marker2, router;
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        map.on('click', function (event) {
+            if (!marker1) {
+                addMarker(event.latlng, "From where:");
+            } else if (!marker2) {
+                addMarker(event.latlng, "To where:");
+            }
+        });
+
+        map.on('contextmenu', function (event) {
+            resetSelection();
+        });
+
+        function addMarker(latlng, title) {
+            var marker = L.marker(latlng, {
+                draggable: true,
+                title: title
+            }).addTo(map);
+
+            marker.on('dragend', function (event) {
+                var coordinates = event.target.getLatLng();
+                getAddress(coordinates, function (address) {
+                    if (title === "From where:") {
+                        document.getElementById('fromInput').value = address;
+                        document.getElementById('fromCoords').innerText = "Coordinates: " + coordinates.lat.toFixed(5) + ", " + coordinates.lng.toFixed(5);
+                    } else {
+                        document.getElementById('toInput').value = address;
+                        document.getElementById('toCoords').innerText = "Coordinates: " + coordinates.lat.toFixed(5) + ", " + coordinates.lng.toFixed(5);
+                    }
+                });
+            });
+
+               if (title === "From where:") {
+        marker1 = marker;
+        var coordinates = marker.getLatLng();
+        var formattedTitle = title + ' (' + coordinates.lat.toFixed(6) + ', ' + coordinates.lng.toFixed(6) + ')';
+        document.getElementById('fromInput').value = formattedTitle;
+    } else {
+        marker2 = marker;
+        var coordinates = marker.getLatLng();
+        var formattedTitle = title + ' (' + coordinates.lat.toFixed(6) + ', ' + coordinates.lng.toFixed(6) + ')';
+        document.getElementById('toInput').value = formattedTitle;
+    }
+}
+
+
+        function calculateDistanceAndPrice() {
+            if (marker1 && marker2) {
+                if (router) {
+                    router.remove();
+                }
+
+                router = L.Routing.control({
+                    waypoints: [
+                        marker1.getLatLng(),
+                        marker2.getLatLng()
+                    ],
+                    routeWhileDragging: true
+                }).addTo(map);
+
+                router.on('routesfound', function (e) {
+                    var routes = e.routes;
+                    var distance = routes[0].summary.totalDistance / 1000;
+                    var price = calculatePrice(distance);
+                    document.getElementById('distance').innerText = distance.toFixed(2) + " km";
+                    document.getElementById('price').innerText = "$" + price.toFixed(2);
+                });
+            } else {
+                alert('Please select both origin and destination locations.');
+            }
+        }
+
+        function resetSelection() {
+            if (marker1) {
+                map.removeLayer(marker1);
+                marker1 = null;
+                document.getElementById('fromInput').value = '';
+                document.getElementById('fromCoords').innerText = ''; // Yeni eklenen satır
+                document.getElementById('distance').innerText = '';
+            }
+            if (marker2) {
+                map.removeLayer(marker2);
+                marker2 = null;
+                document.getElementById('toInput').value = '';
+                document.getElementById('toCoords').innerText = ''; // Yeni eklenen satır
+                document.getElementById('distance').innerText = '';
+            }
+            if (router) {
+                router.remove();
+            }
+            flatpickr("#dateInput").clear();
+            flatpickr("#fromDateInput").clear();
+            flatpickr("#returnDateInput").clear();
+        }
+
+        function calculatePrice(distance) {
+            var price;
+            if (distance <= 20) {
+                price = distance * flatRateCoefficient;
+            } else {
+                price = distance * priceCoefficient;
+            }
+            return price;
+        }
+
+        function getAddress(latlng, callback) {
+            var geocodeService = L.esri.Geocoding.geocodeService();
+            geocodeService.reverse().latlng(latlng).run(function (error, result) {
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+                callback(result.address.LongLabel);
+            });
+        }
+
+        flatpickr("#dateInput", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+        });
+
+        flatpickr("#fromDateInput", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+        });
+
+        flatpickr("#returnDateInput", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+        });
+        function fetchCoefficients() {
+            $.ajax({
+                url: '/fetch-coefficients/',
+                method: 'GET',
+                success: function (response) {
+                    // Update coefficients in your JavaScript code
+                    priceCoefficient = response.km_price_coefficient;
+                    flatRateCoefficient = response.flat_rate_coefficient;
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+    
+        // Call this function when the page loads
+            // Call this function when the page loads
+        $(document).ready(function () {
+            fetchCoefficients();
+            calculateDistanceAndPrice(); // Calculate distance and price when the page loads
+        });
+
+        function toggleTripOptions() {
+            var tripType = document.getElementById('tripType').value;
+            if (tripType === "oneWay") {
+                document.getElementById('oneWayOptions').classList.remove('hidden');
+                document.getElementById('roundTripOptions').classList.add('hidden');
+                document.getElementById('returnDateInput').disabled = true;
+                document.getElementById('returnDateNote').style.display = 'block';
+            } else {
+                document.getElementById('oneWayOptions').classList.add('hidden');
+                document.getElementById('roundTripOptions').classList.remove('hidden');
+                document.getElementById('returnDateInput').disabled = false;
+                document.getElementById('returnDateNote').style.display = 'none';
+            }
+        }
+
+        function incrementNumberOfPeople() {
+            var numberOfPeopleInput = document.getElementById('numberOfPeople');
+            var currentNumber = parseInt(numberOfPeopleInput.value);
+            if (currentNumber < 15) {
+                numberOfPeopleInput.value = currentNumber + 1;
+            }
+        }
+
+        function decrementNumberOfPeople() {
+            var numberOfPeopleInput = document.getElementById('numberOfPeople');
+            var currentNumber = parseInt(numberOfPeopleInput.value);
+            if (currentNumber > 1) {
+                numberOfPeopleInput.value = currentNumber - 1;
+            }
+        }
+
+        function incrementNumberOfCars() {
+            var numberOfCarsInput = document.getElementById('numberOfCars');
+            var currentNumber = parseInt(numberOfCarsInput.value);
+            if (currentNumber < 5) {
+                numberOfCarsInput.value = currentNumber + 1;
+            }
+        }
+
+        function decrementNumberOfCars() {
+            var numberOfCarsInput = document.getElementById('numberOfCars');
+            var currentNumber = parseInt(numberOfCarsInput.value);
+            if (currentNumber > 1) {
+                numberOfCarsInput.value = currentNumber - 1;
+            }
+        }
+        function saveTripData() {
+         var formData = new FormData(document.getElementById('tripForm'));
+         $.ajax({
+            url: '/save-trip-data/',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Handle success response
+                console.log('Form data saved successfully');
+            },
+            error: function (error) {
+                // Handle error response
+                console.error('Error saving form data:', error);
+            }
+         });
+}
+
+    </script>
+</body>
+</html>

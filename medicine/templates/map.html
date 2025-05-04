@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstanbul Haritası ve İki Nokta Seçimi</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JavaScript -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <!-- Esri Geocoding Plugin JavaScript -->
+    <script src="https://unpkg.com/esri-leaflet"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f9f9f9, #e9f2f9); /* Canlı arka plan */
+        }
+
+        #map {
+            height: 450px;
+        }
+
+        #form-container {
+            text-align: right;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            float: right; /* Sağa kaydırma */
+            width: calc(60% - 40px); /* Sayfa genişliğinin tamamı - padding */
+            margin-left: 20px; /* Sol boşluk */
+            margin-right: 20px; /* Sağ boşluk */
+        }
+        
+        
+        #form-container h2 {
+            margin: 5px 0;
+        }
+
+        #form-container input[type="text"],
+        #form-container select {
+            padding: 10px;
+            margin: 5px;
+            width: 100px;
+            
+        }
+
+        #form-container button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+
+        #form-container button:hover {
+            background-color: #45a049;
+        }
+
+        #result-container {
+            margin-top: 10px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Yarı saydamlık */
+            padding: 300px;
+            border-radius: 16px;
+        }
+
+        #result-container p {
+            margin: 5px 0;
+        }
+
+        #result-container .label {
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* New Styles */
+        #form-container select {
+            width: 220px;
+        }
+
+        #form-container input[type="text"] {
+            width: 200px;
+        }
+
+        #form-container .option-group {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        #form-container .option-group label {
+            font-size: 14px;
+            display: block;
+        }
+
+        #form-container img {
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .round-trip-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .round-trip-option label {
+            margin-right: 5px;
+        }
+
+        .round-trip-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .number-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .number-input button {
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+
+        .number-input input {
+            text-align: center;
+            width: 50px;
+            font-size: 14px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+    </style>
